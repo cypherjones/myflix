@@ -10,6 +10,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
+gem 'pg'
 
 group :development do
   gem 'sqlite3'
@@ -22,7 +23,6 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'pg'
 end
 
 group :test do
