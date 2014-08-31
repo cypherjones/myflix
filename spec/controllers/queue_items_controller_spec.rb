@@ -73,7 +73,7 @@ describe QueueItemsController do
 			session[:user_id] = Fabricate(:user).id
 			queue_item = Fabricate(:queue_item)
 			delete :destroy, id: queue_item.id
-			expect(response).to redirect_to queue_item_path
+			expect(response).to redirect_to my_queue_path
 		end		
 		it 'deletes the queue item' do
 			abby = Fabricate(:user)
@@ -96,7 +96,28 @@ describe QueueItemsController do
 		end
 	end
 
+	describe "POST update_queue" do
+		context 'with valid inputs'
+			it 'redirects to the my queue page' do
+				abby = Fabricate(:user)
+				session[:user_id] = abby.id
+				queue_item1 = Fabricate(:queue_item, user: abby, position: 1)
+				queue_item2 = Fabricate(:queue_item, user: abby, position: 2)
+				post :update_queue, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}] 
+				expect(response).to redirect_to my_queue_path
+			end
+			it 'reorders the queue items' do
+				abby = Fabricate(:user)
+				session[:user_id] = abby.id
+				queue_item1 = Fabricate(:queue_item, user: abby, position: 1)
+				queue_item2 = Fabricate(:queue_item, user: abby, position: 2)
+				post :update_queue, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}] 
+				expect(abby.queue_items).to eq([queue_item2, queue_item1])
+			end
 
-
-
+			it 'normalizes the position numbers of the queue items'
+		context 'with invalid inputs'
+		context 'with unauthenticated users'
+		context 'with queue items that do not belong to current user'
+	end
 end
