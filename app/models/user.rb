@@ -3,5 +3,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
 
   has_secure_password
-  has_many :queue_items
+ 
+  has_many :queue_items, -> { order(position: :asc) }
 end
