@@ -12,6 +12,10 @@ class QueueItem < ActiveRecord::Base
 		review.rating if review
 	end
 
+	def rating=(new_rating)
+		
+	end
+
 	def category_name
 		category.name
 	end
