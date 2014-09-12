@@ -132,15 +132,14 @@ describe QueueItemsController do
 		end
 
 		context 'with invalid inputs' do
+			let(:abby) { Fabricate(:user) }
+	    let(:video) { Fabricate(:video) }
+		  let(:queue_item1) { Fabricate(:queue_item, user: abby, position: 1, video: video) }
+		  let(:queue_item2) { Fabricate(:queue_item, user: abby, position: 2, video: video) }
 
-		let(:abby) { Fabricate(:user) }
-		let(:video) { Fabricate(:video) }
-		let(:queue_item1) { Fabricate(:queue_item, user: abby, position: 1, video: video) }
-		let(:queue_item2) { Fabricate(:queue_item, user: abby, position: 2, video: video) }
-
-		before do
-			session[:user_id] = abby.id
-		end
+			before do
+				session[:user_id] = abby.id
+			end
 
 			it 'redirects to the my queue page' do
 				post :update_queue, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 1}] 
