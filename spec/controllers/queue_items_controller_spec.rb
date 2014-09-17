@@ -62,9 +62,9 @@ describe QueueItemsController do
       post :create, video_id: vikings.id
       expect(abby.queue_items.count).to eq(1)
     end
-    it 'redirects to the sign in page for an unathenticated user' do
-      post :create, video_id: 3
-      expect(response).to redirect_to sign_in_path
+ 
+    it_behaves_like "requires sign in" do
+      let(:action) { post :create, video_id: 3 }
     end
   end
 
@@ -90,10 +90,11 @@ describe QueueItemsController do
       delete :destroy, id: queue_item.id
       expect(QueueItem.count).to eq(1)
     end
-    it 'redirects to the sign in page for unauthenticated users' do
-      delete :destroy, id: 3
-      expect(response).to redirect_to sign_in_path
+  
+    it_behaves_like "requires sign in" do
+      let(:action) { delete :destroy, id: 3 }
     end
+
     it 'normalizes queue items after destroy' do
       abby = Fabricate(:user)
       set_current_user(abby)
@@ -120,6 +121,7 @@ describe QueueItemsController do
         post :update_queue, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}] 
         expect(response).to redirect_to my_queue_path
       end
+
       it 'reorders the queue items' do
         post :update_queue, queue_items: [{id: queue_item1.id, position: 2}, {id: queue_item2.id, position: 1}] 
         expect(abby.queue_items).to eq([queue_item2, queue_item1])
@@ -156,9 +158,8 @@ describe QueueItemsController do
     end
 
     context 'with unauthenticated users' do
-      it 'redirects to the sign in page' do
-        post :update_queue, queue_items: [{id: 2, position: 3}, {id: 3, position: 2}] 
-        expect(response).to redirect_to sign_in_path 
+      it_behaves_like "requires sign in" do
+        let(:action) { post :update_queue, queue_items: [{id: 2, position: 3}, {id: 3, position: 2}] }
       end
     end
 
